@@ -59,8 +59,12 @@ public class Server implements ConnectionListener {
     @Override
     public void onReceiveHandler(Connection connection, String in) throws RuntimeException, IOException {
         var out = new StringBuilder();
-        // TODO - здесь обработчик должен быть
+
         final var requestLine = in;
+        if (in.equals("")){
+            //onDisconnect(connection);
+            return;
+        }
         final var parts = requestLine.split(" ");
 
         if (parts.length != 3) {
@@ -73,9 +77,10 @@ public class Server implements ConnectionListener {
             out.append("HTTP/1.1 404 Not Found\r\n");
             out.append("Content-Length: 0\r\n");
             out.append("Connection: close\r\n");
+            connection.sendOut(String.valueOf(out));
+            return;
         }
-        connection.sendOut(String.valueOf(out));
-        return;
+
 
         final Path filePath = Path.of(".", "public", path);
         final var mimeType = Files.probeContentType(filePath);
@@ -83,7 +88,6 @@ public class Server implements ConnectionListener {
         // special case for classic
         if (path.equals("/classic.html")) {
             final String template = Files.readString(filePath);
-
             final var content = template.replace(
                     "{time}",
                     LocalDateTime.now().toString()
@@ -95,6 +99,7 @@ public class Server implements ConnectionListener {
             connection.sendOut(String.valueOf(out));
             return;
         }
+
     }
 
     @Override
