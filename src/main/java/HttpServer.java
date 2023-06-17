@@ -7,18 +7,7 @@ public class HttpServer {
     public static final String WEB_ROOT = System.getProperty("user.dir") + File.separator + "public";
     private static final String SHUTDOWN_COMMAND = "/SHUTDOWN";
     private boolean shutdown = false;
-    final List<String> validPaths = List.of(
-            "/index.html",
-            "/spring.svg",
-            "/spring.png",
-            "/resources.html",
-            "/styles.css",
-            "/app.js",
-            "/links.html",
-            "/forms.html",
-            "/classic.html",
-            "/events.html",
-            "/events.js");
+
 
     public HttpServer() {
         this.port = 9999;

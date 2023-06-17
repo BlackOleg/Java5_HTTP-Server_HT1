@@ -15,6 +15,7 @@ public class Main {
         final var server = new HttpServer();
         ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(64);
         server.go();
+
 //    try (final var serverSocket = new ServerSocket(9999)) {
 //      while (true) {
 //        try (

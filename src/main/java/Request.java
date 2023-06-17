@@ -7,19 +7,16 @@ public class Request {
         this.input = input;
     }
     public void parse() {
-
-        System.out.print(input);
-
         uri = parseUri(input);
     }
 
     private String parseUri(String requestString) {
-        int index1, index2;
-        index1 = requestString.indexOf(' ');
-        if (index1 != -1) {
-            index2 = requestString.indexOf(' ', index1 + 1); if (index2 > index1)
-                return requestString.substring(index1 + 1, index2);
+        final var parts = requestString.split(" ");
+
+        if (parts.length == 3) {
+           return parts[1];
         }
+
         return null;
     }
     public String getUri() {
