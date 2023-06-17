@@ -73,7 +73,6 @@ public class Response {
                     output.flush();
                 }
             } else {
-                // file not found
                 sendError404();
             }
         } catch (Exception e) {
@@ -95,8 +94,6 @@ public class Response {
 
             if (file.exists()) {
                 final var mimeType = Files.probeContentType(file.toPath());
-                //final var filePath = Path.of(".", "public", path);
-                //final var mimeType = Files.probeContentType(filePath);
 
                 // special case for classic
                 if (request.getUri().equals("/classic.html")) {

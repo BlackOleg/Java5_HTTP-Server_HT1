@@ -1,5 +1,4 @@
-import java.io.InputStream;
-import java.io.IOException;
+
 public class Request {
     private String  input;
     private String uri;
