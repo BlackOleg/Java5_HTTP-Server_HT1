@@ -1,6 +1,8 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class HttpServer {
     private final int port;
@@ -26,6 +28,8 @@ public class HttpServer {
                 try {
                     final var socket = serverSocket.accept();
                     System.out.println("New client connected");
+                    ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(64);
+                    //threadPoolExecutor.execute(new ServerThreads(socket));
                     new ServerThreads(socket).start();
                 } catch (Exception e) {
                     e.printStackTrace();
