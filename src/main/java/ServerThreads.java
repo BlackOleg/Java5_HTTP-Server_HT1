@@ -9,10 +9,9 @@ public class ServerThreads extends Thread {
     }
 
     public void run() {
-        try {
-            final var in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            final var out = new BufferedOutputStream(socket.getOutputStream());
-            String line = in.readLine();
+        try (final var in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+             final var out = new BufferedOutputStream(socket.getOutputStream())) {
+             String line = in.readLine();
 
             if (line != null) {
                 System.out.println("Request is: " + line);
@@ -22,6 +21,8 @@ public class ServerThreads extends Thread {
                 response.setRequest(request);
                 response.handler();
             }
+            socket.close();
+            System.out.println("Client disconnected.");
         } catch (IOException ex) {
             System.out.println("Server exception: " + ex.getMessage());
             ex.printStackTrace();

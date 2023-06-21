@@ -1,11 +1,13 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.*;
+
 
 public class HttpServer {
     private final int port;
+    ExecutorService threadPoolExecutor;
+    private static final int pool = 64;
     public static final String WEB_ROOT = System.getProperty("user.dir") + File.separator + "public";
     private static final String SHUTDOWN_COMMAND = "/SHUTDOWN";
     private boolean shutdown = false;
@@ -20,7 +22,7 @@ public class HttpServer {
     }
 
     public void go() {
-
+        threadPoolExecutor = Executors.newFixedThreadPool(pool);
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("Server started on port: " + port);
             // Loop waiting for a request
@@ -28,9 +30,8 @@ public class HttpServer {
                 try {
                     final var socket = serverSocket.accept();
                     System.out.println("New client connected");
-                    ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(64);
-                    //threadPoolExecutor.execute(new ServerThreads(socket));
-                    new ServerThreads(socket).start();
+                    // instead of - new ServerThreads(socket).start();
+                    threadPoolExecutor.execute(new ServerThreads(socket));
                 } catch (Exception e) {
                     e.printStackTrace();
 
@@ -40,6 +41,8 @@ public class HttpServer {
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
+        } finally {
+            threadPoolExecutor.shutdown();
         }
 
     }
