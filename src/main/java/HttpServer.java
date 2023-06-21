@@ -34,7 +34,6 @@ public class HttpServer {
                     threadPoolExecutor.execute(new ServerThreads(socket));
                 } catch (Exception e) {
                     e.printStackTrace();
-
                 }
             }
 
